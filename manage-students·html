@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Students — Learnify Admin</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="../dashboard.css"/>
+  <link rel="stylesheet" href="../admin.css"/>
+</head>
+<body>
+
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar admin-sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo" style="color:var(--error)">Learn<span style="color:var(--text-primary)">ify</span>
+      <span style="font-size:0.6rem;background:rgba(248,113,113,0.15);color:var(--error);padding:0.15rem 0.4rem;border-radius:3px;margin-left:0.4rem;vertical-align:middle">ADMIN</span>
+    </div>
+  </div>
+  <div class="sidebar-user">
+    <div class="sidebar-avatar" style="background:var(--error)">AU</div>
+    <div class="sidebar-user-info">
+      <div class="sidebar-username" data-admin-name>Admin User</div>
+      <div class="sidebar-role" style="color:var(--error)">Administrator</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Overview</div>
+    <a href="admin-dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+    <div class="sidebar-section-label">Courses</div>
+    <a href="add-course.html" class="sidebar-link"><span class="icon">➕</span> Add Course</a>
+    <a href="manage-courses.html" class="sidebar-link"><span class="icon">📚</span> Manage Courses</a>
+    <div class="sidebar-section-label">Users</div>
+    <a href="manage-students.html" class="sidebar-link active"><span class="icon">👥</span> Manage Students</a>
+    <div class="sidebar-section-label">Settings</div>
+    <a href="#" class="sidebar-link"><span class="icon">⚙️</span> Site Settings</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-logout" data-admin-logout>🚪 Logout</div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:1rem">
+      <button id="menuToggle" class="menu-toggle">☰</button>
+      <div>
+        <h2>Manage Students</h2>
+        <p>View and manage all registered students</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-outline btn-sm" onclick="exportStudents()">📤 Export CSV</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:1.75rem" id="student-stats"></div>
+
+  <!-- Filters -->
+  <div class="admin-panel" style="padding:1.25rem">
+    <div style="display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center">
+      <input type="text" id="search-students" class="form-control" placeholder="🔍 Search by name or email…" style="flex:1;min-width:220px"/>
+      <select id="filter-enrolled" class="form-control form-select" style="width:auto" onchange="Admin.initManageStudents()">
+        <option value="">All Students</option>
+        <option value="enrolled">Has Enrollments</option>
+        <option value="none">No Enrollments</option>
+      </select>
+      <button class="btn btn-outline btn-sm" onclick="clearFilters()">✕ Clear</button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="admin-panel">
+    <div class="panel-header">
+      <div class="panel-title">All Students</div>
+      <div id="students-count" style="font-size:0.82rem;color:var(--text-muted)"></div>
+    </div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Email</th>
+            <th>Joined</th>
+            <th>Courses</th>
+            <th>Enrolled In</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="students-tbody">
+          <tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-muted)"><span class="spinner"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<!-- Student Detail Modal -->
+<div class="modal-overlay" id="student-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Student Profile</div>
+      <button class="modal-close" onclick="closeStudentModal()">✕</button>
+    </div>
+    <div id="student-modal-body"></div>
+  </div>
+</div>
+
+<script src="../auth.js"></script>
+<script src="../courses.js"></script>
+<script src="../dashboard.js"></script>
+<script src="../admin.js"></script>
+<script>
+  Admin.initManageStudents();
+  renderStats();
+
+  function renderStats() {
+    const users = Auth.getUsers();
+    const withEnroll = users.filter(u => (u.enrolledCourses || []).length > 0);
+    const totalEnrollments = users.reduce((acc, u) => acc + (u.enrolledCourses || []).length, 0);
+    const thisMonth = users.filter(u => u.joinedAt && u.joinedAt.startsWith(new Date().toISOString().slice(0,7))).length;
+    document.getElementById('student-stats').innerHTML = `
+      <div class="admin-stat" style="padding:1rem">
+        <div class="admin-stat-icon" style="font-size:1.2rem">👥</div>
+        <div class="admin-stat-val" style="font-size:1.5rem">${users.length}</div>
+        <div class="admin-stat-label">Total Students</div>
+      </div>
+      <div class="admin-stat" style="padding:1rem">
+        <div class="admin-stat-icon" style="font-size:1.2rem">📚</div>
+        <div class="admin-stat-val" style="font-size:1.5rem;color:var(--gold)">${withEnroll.length}</div>
+        <div class="admin-stat-label">Active Learners</div>
+      </div>
+      <div class="admin-stat" style="padding:1rem">
+        <div class="admin-stat-icon" style="font-size:1.2rem">📝</div>
+        <div class="admin-stat-val" style="font-size:1.5rem;color:var(--info)">${totalEnrollments}</div>
+        <div class="admin-stat-label">Total Enrollments</div>
+      </div>
+      <div class="admin-stat" style="padding:1rem">
+        <div class="admin-stat-icon" style="font-size:1.2rem">🆕</div>
+        <div class="admin-stat-val" style="font-size:1.5rem;color:var(--success)">${thisMonth}</div>
+        <div class="admin-stat-label">New This Month</div>
+      </div>`;
+  }
+
+  function clearFilters() {
+    document.getElementById('search-students').value = '';
+    document.getElementById('filter-enrolled').value = '';
+    Admin.initManageStudents();
+  }
+
+  // ─── Enhanced view student ───
+  Admin.viewStudent = (id) => {
+    const users = Auth.getUsers();
+    const u = users.find(u => u.id === id);
+    if (!u) return;
+    const enrolled = (u.enrolledCourses || []).map(cid => Courses.getById(cid)).filter(Boolean);
+
+    document.getElementById('student-modal-body').innerHTML = `
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)">
+        <div class="avatar" style="width:56px;height:56px;font-size:1.3rem">${u.avatar}</div>
+        <div>
+          <h3 style="margin-bottom:0.2rem">${u.name}</h3>
+          <div style="font-size:0.85rem;color:var(--text-muted)">${u.email}</div>
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.2rem">Joined: ${u.joinedAt}</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:1.5rem">
+        <div style="font-size:0.78rem;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem">
+          Enrolled Courses (${enrolled.length})
+        </div>
+        ${enrolled.length ? enrolled.map(c => {
+          const prog = Courses.getProgress(u.id, c.id);
+          return `<div style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:var(--bg-secondary);border-radius:var(--radius-sm);margin-bottom:0.5rem">
+            <div style="font-size:1.5rem">${c.emoji || '📚'}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:0.85rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.title}</div>
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-top:0.3rem">
+                <div class="progress-bar" style="flex:1;height:4px"><div class="progress-fill" style="width:${prog.progress}%"></div></div>
+                <span style="font-size:0.72rem;color:var(--gold);font-weight:600">${prog.progress}%</span>
+              </div>
+            </div>
+          </div>`;
+        }).join('') : '<div style="color:var(--text-muted);font-size:0.875rem;text-align:center;padding:1rem">No courses enrolled yet</div>'}
+      </div>
+
+      <div style="display:flex;gap:0.75rem">
+        <button class="btn btn-outline btn-sm" onclick="closeStudentModal()">Close</button>
+        <button class="btn btn-danger btn-sm" onclick="closeStudentModal();Admin.removeStudent('${u.id}')">Remove Student</button>
+      </div>`;
+    document.getElementById('student-modal').classList.add('open');
+  };
+
+  function closeStudentModal() { document.getElementById('student-modal').classList.remove('open'); }
+
+  document.getElementById('student-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeStudentModal();
+  });
+
+  function exportStudents() {
+    const users = Auth.getUsers();
+    const rows = [['Name','Email','Joined','Enrolled Courses','Course Names']];
+    users.forEach(u => {
+      const names = (u.enrolledCourses || []).map(cid => Courses.getById(cid)?.title || '').filter(Boolean);
+      rows.push([u.name, u.email, u.joinedAt, (u.enrolledCourses || []).length, names.join(' | ')]);
+    });
+    const csv = rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `students-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+  }
+</script>
+</body>
+</html>

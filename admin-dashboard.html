@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard — Learnify</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="../dashboard.css"/>
+  <link rel="stylesheet" href="../admin.css"/>
+</head>
+<body>
+
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+<!-- Admin Sidebar -->
+<aside class="sidebar admin-sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo" style="color:var(--error)">Learn<span style="color:var(--text-primary)">ify</span>
+      <span style="font-size:0.6rem;background:rgba(248,113,113,0.15);color:var(--error);padding:0.15rem 0.4rem;border-radius:3px;margin-left:0.4rem;vertical-align:middle">ADMIN</span>
+    </div>
+  </div>
+  <div class="sidebar-user">
+    <div class="sidebar-avatar" style="background:var(--error)">AU</div>
+    <div class="sidebar-user-info">
+      <div class="sidebar-username" data-admin-name>Admin User</div>
+      <div class="sidebar-role" style="color:var(--error)">Administrator</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Overview</div>
+    <a href="admin-dashboard.html" class="sidebar-link active"><span class="icon">📊</span> Dashboard</a>
+
+    <div class="sidebar-section-label">Courses</div>
+    <a href="add-course.html" class="sidebar-link"><span class="icon">➕</span> Add Course</a>
+    <a href="manage-courses.html" class="sidebar-link"><span class="icon">📚</span> Manage Courses</a>
+
+    <div class="sidebar-section-label">Users</div>
+    <a href="manage-students.html" class="sidebar-link"><span class="icon">👥</span> Manage Students</a>
+
+    <div class="sidebar-section-label">Settings</div>
+    <a href="#" class="sidebar-link"><span class="icon">⚙️</span> Site Settings</a>
+    <a href="#" class="sidebar-link"><span class="icon">🎨</span> Appearance</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-logout" data-admin-logout>
+      <span>🚪</span> Logout
+    </div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:1rem">
+      <button id="menuToggle" class="menu-toggle">☰</button>
+      <div>
+        <h2>Dashboard <span class="admin-badge">Admin</span></h2>
+        <p>Welcome back, <span data-admin-name style="color:var(--gold)">Admin</span></p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+      <a href="add-course.html" class="btn btn-primary btn-sm">+ Add Course</a>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="admin-stats">
+    <div class="admin-stat">
+      <div class="admin-stat-icon">📚</div>
+      <div class="admin-stat-val" id="stat-courses">0</div>
+      <div class="admin-stat-label">Total Courses</div>
+    </div>
+    <div class="admin-stat">
+      <div class="admin-stat-icon">👥</div>
+      <div class="admin-stat-val" id="stat-students">0</div>
+      <div class="admin-stat-label">Total Students</div>
+    </div>
+    <div class="admin-stat">
+      <div class="admin-stat-icon">✅</div>
+      <div class="admin-stat-val" id="stat-published">0</div>
+      <div class="admin-stat-label">Published Courses</div>
+    </div>
+    <div class="admin-stat">
+      <div class="admin-stat-icon">💰</div>
+      <div class="admin-stat-val" id="stat-revenue">₹0</div>
+      <div class="admin-stat-label">Total Revenue</div>
+    </div>
+  </div>
+
+  <!-- Charts + Activity -->
+  <div class="dash-grid" style="margin-bottom:1.5rem">
+    <div class="admin-panel" style="margin-bottom:0">
+      <div class="panel-header">
+        <div class="panel-title">📈 Monthly Revenue</div>
+        <span style="font-size:0.78rem;color:var(--text-muted)">Last 6 months</span>
+      </div>
+      <div id="revenue-chart"></div>
+    </div>
+
+    <div class="admin-panel" style="margin-bottom:0">
+      <div class="panel-title" style="margin-bottom:1.25rem">⚡ Quick Actions</div>
+      <div style="display:flex;flex-direction:column;gap:0.75rem">
+        <a href="add-course.html" class="btn btn-primary btn-block">➕ Add New Course</a>
+        <a href="manage-courses.html" class="btn btn-outline btn-block">📚 Manage Courses</a>
+        <a href="manage-students.html" class="btn btn-outline btn-block">👥 Manage Students</a>
+        <button class="btn btn-outline btn-block" onclick="exportData()">📤 Export Data</button>
+      </div>
+      <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+        <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.75rem">Platform Health</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem">
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem">
+            <span style="color:var(--text-secondary)">Server Status</span>
+            <span style="color:var(--success)">● Online</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem">
+            <span style="color:var(--text-secondary)">Storage Used</span>
+            <span style="color:var(--text-secondary)">24 GB / 100 GB</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem">
+            <span style="color:var(--text-secondary)">Active Sessions</span>
+            <span style="color:var(--gold)">47</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Courses -->
+  <div class="admin-panel">
+    <div class="panel-header">
+      <div class="panel-title">📚 Recent Courses</div>
+      <a href="manage-courses.html" class="btn btn-outline btn-sm">View All</a>
+    </div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Course</th><th>Instructor</th><th>Students</th><th>Status</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="recent-courses">
+          <tr><td colspan="5" style="text-align:center;color:var(--text-muted)"><span class="spinner"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Recent Students -->
+  <div class="admin-panel">
+    <div class="panel-header">
+      <div class="panel-title">👥 Recent Students</div>
+      <a href="manage-students.html" class="btn btn-outline btn-sm">View All</a>
+    </div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr><th>Name</th><th>Email</th><th>Enrolled</th><th>Joined</th></tr>
+        </thead>
+        <tbody id="recent-students">
+          <tr><td colspan="4" style="text-align:center;color:var(--text-muted)"><span class="spinner"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<script src="../auth.js"></script>
+<script src="../courses.js"></script>
+<script src="../dashboard.js"></script>
+<script src="../admin.js"></script>
+<script>
+  Admin.initDashboard();
+
+  function exportData() {
+    const data = {
+      courses: Courses.getAll(),
+      students: Auth.getUsers().map(u => ({ id: u.id, name: u.name, email: u.email, joinedAt: u.joinedAt, enrolledCount: (u.enrolledCourses||[]).length }))
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `learnify-export-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+  }
+</script>
+</body>
+</html>

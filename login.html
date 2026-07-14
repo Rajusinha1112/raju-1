@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — Learnify</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <a href="index.html" class="nav-logo">Learn<span>ify</span></a>
+    </div>
+    <h1 class="auth-title">Welcome Back</h1>
+    <p class="auth-sub">Continue your learning journey</p>
+
+    <div id="login-alert" class="alert"></div>
+
+    <form id="login-form">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" id="email" class="form-control" placeholder="you@example.com" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="display:flex;justify-content:space-between">
+          Password
+          <a href="#" style="color:var(--gold);font-size:0.8rem">Forgot password?</a>
+        </label>
+        <input type="password" id="password" class="form-control" placeholder="Enter your password" required/>
+      </div>
+      <div class="form-check mb-2" style="margin-bottom:1.25rem">
+        <input type="checkbox" id="remember"/>
+        <label for="remember" style="font-size:0.85rem;color:var(--text-secondary)">Remember me</label>
+      </div>
+      <button type="submit" id="btn-login" class="btn btn-primary btn-block btn-lg">Sign In</button>
+    </form>
+
+    <div class="auth-divider">or</div>
+
+    <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;font-size:0.82rem;color:var(--text-muted)">
+      <div style="margin-bottom:0.4rem;font-weight:600;color:var(--text-secondary)">🧪 Demo Credentials</div>
+      <div>Student: <code style="color:var(--gold)">student@demo.com</code> / <code style="color:var(--gold)">demo123</code></div>
+    </div>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="register.html">Create one free</a>
+    </div>
+    <div class="auth-footer" style="margin-top:0.5rem">
+      Admin? <a href="admin-login.html">Admin login →</a>
+    </div>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+  // Redirect if already logged in
+  if (Auth.getCurrentUser()) location.href = 'student-dashboard.html';
+
+  document.getElementById('login-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = document.getElementById('btn-login');
+    setLoading(btn, true);
+    setTimeout(() => {
+      const result = Auth.login(
+        document.getElementById('email').value,
+        document.getElementById('password').value
+      );
+      if (result.success) {
+        showAlert('login-alert', 'Login successful! Redirecting…', 'success');
+        setTimeout(() => location.href = 'student-dashboard.html', 800);
+      } else {
+        showAlert('login-alert', result.msg, 'error');
+        setLoading(btn, false);
+      }
+    }, 600);
+  });
+</script>
+</body>
+</html>

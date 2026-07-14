@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Courses — Learnify Admin</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="../dashboard.css"/>
+  <link rel="stylesheet" href="../admin.css"/>
+</head>
+<body>
+
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar admin-sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo" style="color:var(--error)">Learn<span style="color:var(--text-primary)">ify</span>
+      <span style="font-size:0.6rem;background:rgba(248,113,113,0.15);color:var(--error);padding:0.15rem 0.4rem;border-radius:3px;margin-left:0.4rem;vertical-align:middle">ADMIN</span>
+    </div>
+  </div>
+  <div class="sidebar-user">
+    <div class="sidebar-avatar" style="background:var(--error)">AU</div>
+    <div class="sidebar-user-info">
+      <div class="sidebar-username" data-admin-name>Admin User</div>
+      <div class="sidebar-role" style="color:var(--error)">Administrator</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Overview</div>
+    <a href="admin-dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+    <div class="sidebar-section-label">Courses</div>
+    <a href="add-course.html" class="sidebar-link"><span class="icon">➕</span> Add Course</a>
+    <a href="manage-courses.html" class="sidebar-link active"><span class="icon">📚</span> Manage Courses</a>
+    <div class="sidebar-section-label">Users</div>
+    <a href="manage-students.html" class="sidebar-link"><span class="icon">👥</span> Manage Students</a>
+    <div class="sidebar-section-label">Settings</div>
+    <a href="#" class="sidebar-link"><span class="icon">⚙️</span> Site Settings</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-logout" data-admin-logout>🚪 Logout</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main-content">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:1rem">
+      <button id="menuToggle" class="menu-toggle">☰</button>
+      <div>
+        <h2>Manage Courses</h2>
+        <p>View, edit and publish all courses</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <a href="add-course.html" class="btn btn-primary btn-sm">+ Add Course</a>
+    </div>
+  </div>
+
+  <!-- Stats Row -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:1.75rem">
+    <div class="admin-stat" id="ms-total" style="padding:1rem"></div>
+    <div class="admin-stat" id="ms-pub" style="padding:1rem"></div>
+    <div class="admin-stat" id="ms-draft" style="padding:1rem"></div>
+    <div class="admin-stat" id="ms-free" style="padding:1rem"></div>
+  </div>
+
+  <!-- Filters -->
+  <div class="admin-panel" style="padding:1.25rem">
+    <div style="display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center">
+      <input type="text" id="search-courses" class="form-control" placeholder="🔍 Search by title or instructor…" style="flex:1;min-width:200px"/>
+      <select id="filter-category" class="form-control form-select" style="width:auto">
+        <option value="">All Categories</option>
+        <option value="Web Dev">Web Dev</option>
+        <option value="Data Science">Data Science</option>
+        <option value="Design">Design</option>
+        <option value="Mobile">Mobile</option>
+        <option value="Cloud">Cloud</option>
+        <option value="Marketing">Marketing</option>
+      </select>
+      <select id="filter-status" class="form-control form-select" style="width:auto">
+        <option value="">All Status</option>
+        <option value="published">Published</option>
+        <option value="draft">Draft</option>
+      </select>
+      <button class="btn btn-outline btn-sm" onclick="clearFilters()">✕ Clear</button>
+    </div>
+  </div>
+
+  <!-- Courses Table -->
+  <div class="admin-panel">
+    <div class="panel-header">
+      <div class="panel-title">All Courses</div>
+      <div id="courses-count" style="font-size:0.82rem;color:var(--text-muted)"></div>
+    </div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Category</th>
+            <th>Instructor</th>
+            <th>Students</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="courses-tbody">
+          <tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted)"><span class="spinner"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Edit Course</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-form-body">
+      <div class="form-group">
+        <label class="form-label">Course Title</label>
+        <input type="text" id="m-title" class="form-control"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Instructor</label>
+        <input type="text" id="m-instructor" class="form-control"/>
+      </div>
+      <div class="form-grid" style="grid-template-columns:1fr 1fr">
+        <div class="form-group">
+          <label class="form-label">Price (₹)</label>
+          <input type="number" id="m-price" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Level</label>
+          <select id="m-level" class="form-control form-select">
+            <option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>All Levels</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea id="m-desc" class="form-control" rows="3"></textarea>
+      </div>
+      <div class="form-check" style="margin-bottom:1.25rem">
+        <input type="checkbox" id="m-published"/>
+        <label for="m-published" style="font-size:0.875rem;color:var(--text-secondary)">Published</label>
+      </div>
+      <div style="display:flex;gap:0.75rem">
+        <button class="btn btn-primary btn-lg" onclick="saveEdit()" style="flex:1">Save Changes</button>
+        <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../auth.js"></script>
+<script src="../courses.js"></script>
+<script src="../dashboard.js"></script>
+<script src="../admin.js"></script>
+<script>
+  Admin.initManageCourses();
+
+  // Update stats row
+  const updateStats = () => {
+    const all = Courses.getAll();
+    const pub = all.filter(c => c.published);
+    const draft = all.filter(c => !c.published);
+    const free = all.filter(c => c.price === 0);
+    document.getElementById('ms-total').innerHTML = `<div class="admin-stat-icon" style="font-size:1.2rem">📚</div><div class="admin-stat-val" style="font-size:1.5rem">${all.length}</div><div class="admin-stat-label">Total</div>`;
+    document.getElementById('ms-pub').innerHTML = `<div class="admin-stat-icon" style="font-size:1.2rem">✅</div><div class="admin-stat-val" style="font-size:1.5rem;color:var(--success)">${pub.length}</div><div class="admin-stat-label">Published</div>`;
+    document.getElementById('ms-draft').innerHTML = `<div class="admin-stat-icon" style="font-size:1.2rem">📝</div><div class="admin-stat-val" style="font-size:1.5rem;color:var(--text-muted)">${draft.length}</div><div class="admin-stat-label">Drafts</div>`;
+    document.getElementById('ms-free').innerHTML = `<div class="admin-stat-icon" style="font-size:1.2rem">🆓</div><div class="admin-stat-val" style="font-size:1.5rem;color:var(--info)">${free.length}</div><div class="admin-stat-label">Free</div>`;
+  };
+  updateStats();
+
+  function clearFilters() {
+    document.getElementById('search-courses').value = '';
+    document.getElementById('filter-category').value = '';
+    document.getElementById('filter-status').value = '';
+    Admin.initManageCourses();
+  }
+
+  // ─── Modal edit ───
+  let editingId = null;
+  Admin.editCourse = (id) => {
+    editingId = id;
+    const c = Courses.getById(id);
+    if (!c) return;
+    document.getElementById('m-title').value = c.title;
+    document.getElementById('m-instructor').value = c.instructor;
+    document.getElementById('m-price').value = c.price;
+    document.getElementById('m-level').value = c.level;
+    document.getElementById('m-desc').value = c.description;
+    document.getElementById('m-published').checked = c.published;
+    document.getElementById('edit-modal').classList.add('open');
+  };
+
+  function closeModal() { document.getElementById('edit-modal').classList.remove('open'); editingId = null; }
+
+  function saveEdit() {
+    if (!editingId) return;
+    Courses.update(editingId, {
+      title: document.getElementById('m-title').value,
+      instructor: document.getElementById('m-instructor').value,
+      price: parseInt(document.getElementById('m-price').value) || 0,
+      level: document.getElementById('m-level').value,
+      description: document.getElementById('m-desc').value,
+      published: document.getElementById('m-published').checked,
+    });
+    closeModal();
+    // Re-render
+    const tbody = document.getElementById('courses-tbody');
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:1rem;color:var(--text-muted)">Updating…</td></tr>';
+    setTimeout(() => { Admin.initManageCourses(); updateStats(); }, 300);
+  }
+
+  // Close modal on overlay click
+  document.getElementById('edit-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+</script>
+</body>
+</html>

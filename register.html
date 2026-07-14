@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register — Learnify</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <a href="index.html" class="nav-logo">Learn<span>ify</span></a>
+    </div>
+    <h1 class="auth-title">Create Account</h1>
+    <p class="auth-sub">Start learning for free today</p>
+
+    <div id="reg-alert" class="alert"></div>
+
+    <form id="register-form">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" id="name" class="form-control" placeholder="Rahul Kumar" required minlength="3"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" id="email" class="form-control" placeholder="you@example.com" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Min. 6 characters" required minlength="6"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <input type="password" id="confirm-pass" class="form-control" placeholder="Repeat your password" required/>
+      </div>
+
+      <!-- Password strength -->
+      <div style="margin-bottom:1.25rem">
+        <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:0.3rem">
+          <div id="strength-bar" style="height:100%;width:0%;transition:all 0.3s;border-radius:2px"></div>
+        </div>
+        <div id="strength-text" style="font-size:0.75rem;color:var(--text-muted)"></div>
+      </div>
+
+      <div class="form-check" style="margin-bottom:1.25rem">
+        <input type="checkbox" id="terms" required/>
+        <label for="terms" style="font-size:0.85rem;color:var(--text-secondary)">
+          I agree to the <a href="#" style="color:var(--gold)">Terms of Service</a> and <a href="#" style="color:var(--gold)">Privacy Policy</a>
+        </label>
+      </div>
+
+      <button type="submit" id="btn-register" class="btn btn-primary btn-block btn-lg">Create Free Account</button>
+    </form>
+
+    <div class="auth-footer">
+      Already have an account? <a href="login.html">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+  if (Auth.getCurrentUser()) location.href = 'student-dashboard.html';
+
+  const passInput = document.getElementById('password');
+  passInput.addEventListener('input', () => {
+    const val = passInput.value;
+    const bar = document.getElementById('strength-bar');
+    const txt = document.getElementById('strength-text');
+    let strength = 0, label = '', color = '';
+    if (val.length >= 6) strength++;
+    if (/[A-Z]/.test(val)) strength++;
+    if (/[0-9]/.test(val)) strength++;
+    if (/[^A-Za-z0-9]/.test(val)) strength++;
+    if (strength <= 1) { label='Weak'; color='var(--error)'; }
+    else if (strength === 2) { label='Fair'; color='var(--warning)'; }
+    else if (strength === 3) { label='Good'; color='var(--info)'; }
+    else { label='Strong'; color='var(--success)'; }
+    bar.style.width = (strength * 25) + '%';
+    bar.style.background = color;
+    txt.textContent = val ? `Password strength: ${label}` : '';
+    txt.style.color = color;
+  });
+
+  document.getElementById('register-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const pass = document.getElementById('password').value;
+    const conf = document.getElementById('confirm-pass').value;
+    if (pass !== conf) { showAlert('reg-alert', 'Passwords do not match.', 'error'); return; }
+    const btn = document.getElementById('btn-register');
+    setLoading(btn, true);
+    setTimeout(() => {
+      const result = Auth.register(
+        document.getElementById('name').value,
+        document.getElementById('email').value,
+        pass
+      );
+      if (result.success) {
+        Auth.login(document.getElementById('email').value, pass);
+        showAlert('reg-alert', 'Account created! Redirecting…', 'success');
+        setTimeout(() => location.href = 'student-dashboard.html', 800);
+      } else {
+        showAlert('reg-alert', result.msg, 'error');
+        setLoading(btn, false);
+      }
+    }, 700);
+  });
+</script>
+</body>
+</html>

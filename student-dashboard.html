@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — Learnify</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="dashboard.css"/>
+</head>
+<body>
+
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">Learn<span>ify</span></div>
+  </div>
+  <div class="sidebar-user">
+    <div class="sidebar-avatar" data-user-avatar>DS</div>
+    <div class="sidebar-user-info">
+      <div class="sidebar-username" data-user-name>Loading…</div>
+      <div class="sidebar-role">Student</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main</div>
+    <a href="student-dashboard.html" class="sidebar-link active">
+      <span class="icon">🏠</span> Dashboard
+    </a>
+    <a href="courses.html" class="sidebar-link">
+      <span class="icon">📚</span> Browse Courses
+    </a>
+    <div class="sidebar-section-label">Learning</div>
+    <a href="#enrolled" class="sidebar-link">
+      <span class="icon">▶</span> My Courses
+    </a>
+    <a href="#progress" class="sidebar-link">
+      <span class="icon">📊</span> Progress
+    </a>
+    <a href="#certificates" class="sidebar-link">
+      <span class="icon">🏆</span> Certificates
+    </a>
+    <div class="sidebar-section-label">Account</div>
+    <a href="#" class="sidebar-link">
+      <span class="icon">👤</span> Profile
+    </a>
+    <a href="#" class="sidebar-link">
+      <span class="icon">⚙️</span> Settings
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-logout" data-logout>
+      <span>🚪</span> Logout
+    </div>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main-content">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:1rem">
+      <button id="menuToggle" class="menu-toggle">☰</button>
+      <div class="topbar-left">
+        <h2>Dashboard</h2>
+        <p>Welcome back, <span data-user-name style="color:var(--gold)">Student</span> 👋</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+      <a href="courses.html" class="btn btn-primary btn-sm">+ Enroll Course</a>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <div class="stat-card-icon">📚</div>
+        <div class="stat-card-trend up">Active</div>
+      </div>
+      <div class="stat-card-val" id="stat-enrolled">0</div>
+      <div class="stat-card-label">Enrolled Courses</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <div class="stat-card-icon">✅</div>
+        <div class="stat-card-trend up">Done</div>
+      </div>
+      <div class="stat-card-val" id="stat-completed">0</div>
+      <div class="stat-card-label">Completed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <div class="stat-card-icon">⏳</div>
+        <div class="stat-card-trend up">Progress</div>
+      </div>
+      <div class="stat-card-val" id="stat-inprogress">0</div>
+      <div class="stat-card-label">In Progress</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <div class="stat-card-icon">📈</div>
+      </div>
+      <div class="stat-card-val" id="stat-avgprogress">0%</div>
+      <div class="stat-card-label">Avg. Progress</div>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="dash-grid">
+    <!-- Enrolled Courses -->
+    <div class="dash-card" id="enrolled">
+      <div class="dash-card-header">
+        <div class="dash-card-title">My Courses</div>
+        <a href="courses.html" class="dash-card-action">Browse more →</a>
+      </div>
+      <div class="enrolled-list" id="enrolled-list">
+        <div style="text-align:center;padding:2rem;color:var(--text-muted)"><span class="spinner"></span></div>
+      </div>
+    </div>
+
+    <!-- Activity -->
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <div class="dash-card-title">Recent Activity</div>
+      </div>
+      <div class="activity-list" id="activity-list"></div>
+    </div>
+  </div>
+
+  <!-- Progress + Cert -->
+  <div class="dash-grid" id="progress">
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <div class="dash-card-title">Course Progress</div>
+      </div>
+      <div id="progress-chart">
+        <div style="text-align:center;padding:2rem;color:var(--text-muted)">No data</div>
+      </div>
+    </div>
+
+    <div class="dash-card" id="certificates">
+      <div class="dash-card-header">
+        <div class="dash-card-title">Certificates</div>
+      </div>
+      <div id="certs-wrap">
+        <div style="text-align:center;padding:1rem;color:var(--text-muted);font-size:0.875rem">
+          Complete a course to earn your first certificate 🎓
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="auth.js"></script>
+<script src="courses.js"></script>
+<script src="dashboard.js"></script>
+<script>
+  Dashboard.initSidebarToggle();
+  Dashboard.initLogout();
+  Dashboard.initStudent();
+</script>
+</body>
+</html>

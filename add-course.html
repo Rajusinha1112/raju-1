@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Course — Learnify Admin</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="../dashboard.css"/>
+  <link rel="stylesheet" href="../admin.css"/>
+</head>
+<body>
+
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar admin-sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo" style="color:var(--error)">Learn<span style="color:var(--text-primary)">ify</span>
+      <span style="font-size:0.6rem;background:rgba(248,113,113,0.15);color:var(--error);padding:0.15rem 0.4rem;border-radius:3px;margin-left:0.4rem;vertical-align:middle">ADMIN</span>
+    </div>
+  </div>
+  <div class="sidebar-user">
+    <div class="sidebar-avatar" style="background:var(--error)">AU</div>
+    <div class="sidebar-user-info">
+      <div class="sidebar-username" data-admin-name>Admin User</div>
+      <div class="sidebar-role" style="color:var(--error)">Administrator</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Overview</div>
+    <a href="admin-dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+    <div class="sidebar-section-label">Courses</div>
+    <a href="add-course.html" class="sidebar-link active"><span class="icon">➕</span> Add Course</a>
+    <a href="manage-courses.html" class="sidebar-link"><span class="icon">📚</span> Manage Courses</a>
+    <div class="sidebar-section-label">Users</div>
+    <a href="manage-students.html" class="sidebar-link"><span class="icon">👥</span> Manage Students</a>
+    <div class="sidebar-section-label">Settings</div>
+    <a href="#" class="sidebar-link"><span class="icon">⚙️</span> Site Settings</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-logout" data-admin-logout>🚪 Logout</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main-content">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:1rem">
+      <button id="menuToggle" class="menu-toggle">☰</button>
+      <div>
+        <h2 id="form-title">Add New Course</h2>
+        <p>Fill in the details to publish a new course</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <a href="manage-courses.html" class="btn btn-outline btn-sm">← Back to Courses</a>
+    </div>
+  </div>
+
+  <div id="form-alert" class="alert" style="max-width:800px"></div>
+
+  <form id="course-form">
+    <!-- Basic Info -->
+    <div class="form-panel">
+      <div class="form-section-title">Basic Information</div>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Course Title *</label>
+          <input type="text" id="f-title" class="form-control" placeholder="e.g. Complete React.js Bootcamp 2025" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Instructor Name *</label>
+          <input type="text" id="f-instructor" class="form-control" placeholder="e.g. Rahul Kumar" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category *</label>
+          <select id="f-category" class="form-control form-select" required>
+            <option value="">— Select Category —</option>
+            <option value="Web Dev">Web Development</option>
+            <option value="Data Science">Data Science</option>
+            <option value="Design">UI/UX Design</option>
+            <option value="Mobile">Mobile Development</option>
+            <option value="Cloud">Cloud & DevOps</option>
+            <option value="Marketing">Digital Marketing</option>
+            <option value="Business">Business</option>
+            <option value="Finance">Finance</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Level *</label>
+          <select id="f-level" class="form-control form-select" required>
+            <option value="">— Select Level —</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+            <option value="All Levels">All Levels</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Course Description *</label>
+          <textarea id="f-desc" class="form-control" rows="4" placeholder="Describe what students will learn, who this course is for, and what makes it valuable…" required></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Course Emoji / Icon</label>
+          <input type="text" id="f-emoji" class="form-control" placeholder="e.g. 💻" maxlength="4"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tags (comma separated)</label>
+          <input type="text" id="f-tags" class="form-control" placeholder="e.g. React, JavaScript, Frontend"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing -->
+    <div class="form-panel">
+      <div class="form-section-title">Pricing</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Sale Price (₹) — 0 for Free</label>
+          <input type="number" id="f-price" class="form-control" placeholder="0" min="0" value="0"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Original Price (₹)</label>
+          <input type="number" id="f-origprice" class="form-control" placeholder="0" min="0" value="0"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Rating (0–5)</label>
+          <input type="number" id="f-rating" class="form-control" placeholder="4.5" min="0" max="5" step="0.1" value="0"/>
+        </div>
+      </div>
+      <div style="background:rgba(232,184,75,0.06);border:1px solid var(--border-accent);border-radius:var(--radius-sm);padding:0.75rem 1rem;font-size:0.82rem;color:var(--text-muted)">
+        💡 Set Price to <strong style="color:var(--gold)">0</strong> to make the course free. Discount % will be calculated automatically from original price.
+      </div>
+    </div>
+
+    <!-- Course Details -->
+    <div class="form-panel">
+      <div class="form-section-title">Course Details</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Total Duration</label>
+          <input type="text" id="f-duration" class="form-control" placeholder="e.g. 42 hrs"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Number of Lessons</label>
+          <input type="number" id="f-lessons" class="form-control" placeholder="e.g. 120" min="1"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thumbnail Upload (UI only) -->
+    <div class="form-panel">
+      <div class="form-section-title">Thumbnail / Cover</div>
+      <div class="upload-zone" onclick="this.querySelector('input').click()">
+        <div class="upload-icon">🖼️</div>
+        <p>Click to upload course thumbnail</p>
+        <div class="upload-hint">PNG, JPG, WEBP · Max 5 MB · Recommended 1280×720</div>
+        <input type="file" accept="image/*" style="display:none" onchange="previewThumb(event)"/>
+      </div>
+      <div id="thumb-preview" style="display:none;margin-top:1rem">
+        <img id="thumb-img" style="max-height:160px;border-radius:var(--radius-sm);border:1px solid var(--border)"/>
+        <button type="button" class="btn btn-ghost btn-sm" style="display:block;margin-top:0.4rem" onclick="clearThumb()">✕ Remove</button>
+      </div>
+    </div>
+
+    <!-- Curriculum Builder -->
+    <div class="form-panel">
+      <div class="form-section-title">Curriculum (Preview)</div>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1.25rem">Add your course sections and lessons below.</p>
+      <div class="module-list" id="module-list"></div>
+      <button type="button" class="btn btn-outline btn-sm" style="margin-top:1rem" onclick="addModule()">+ Add Section</button>
+    </div>
+
+    <!-- Publish -->
+    <div class="form-panel">
+      <div class="form-section-title">Publishing</div>
+      <div class="form-check" style="gap:0.75rem;margin-bottom:1.5rem">
+        <input type="checkbox" id="f-published" style="accent-color:var(--gold);width:18px;height:18px"/>
+        <label for="f-published" style="font-size:0.9rem;color:var(--text-secondary);cursor:pointer">
+          <strong>Publish immediately</strong>
+          <span style="display:block;font-size:0.8rem;color:var(--text-muted);margin-top:0.15rem">Course will be visible to all students. Uncheck to save as draft.</span>
+        </label>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <button type="submit" id="btn-submit" class="btn btn-primary btn-lg">🚀 Publish Course</button>
+        <button type="button" class="btn btn-outline btn-lg" onclick="saveDraft()">💾 Save as Draft</button>
+        <a href="manage-courses.html" class="btn btn-ghost btn-lg">Cancel</a>
+      </div>
+    </div>
+  </form>
+</main>
+
+<script src="../auth.js"></script>
+<script src="../courses.js"></script>
+<script src="../dashboard.js"></script>
+<script src="../admin.js"></script>
+<script>
+  Admin.initAddCourse();
+
+  // ─── Thumbnail preview ───
+  function previewThumb(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('thumb-img').src = ev.target.result;
+      document.getElementById('thumb-preview').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+  function clearThumb() {
+    document.getElementById('thumb-img').src = '';
+    document.getElementById('thumb-preview').style.display = 'none';
+  }
+
+  // ─── Curriculum builder ───
+  let moduleCount = 0;
+  function addModule() {
+    moduleCount++;
+    const id = `module-${moduleCount}`;
+    const div = document.createElement('div');
+    div.className = 'module-item'; div.id = id;
+    div.innerHTML = `
+      <div class="module-header">
+        <span class="module-drag">⠿</span>
+        <input class="module-title-input" placeholder="Section ${moduleCount}: e.g. Getting Started" value="Section ${moduleCount}: "/>
+        <div class="module-actions">
+          <button type="button" class="action-btn" onclick="addLesson('${id}')">+ Lesson</button>
+          <button type="button" class="action-btn danger" onclick="document.getElementById('${id}').remove()">🗑</button>
+        </div>
+      </div>
+      <div class="module-body" id="${id}-body"></div>`;
+    document.getElementById('module-list').appendChild(div);
+  }
+
+  function addLesson(moduleId) {
+    const body = document.getElementById(moduleId + '-body');
+    const li = document.createElement('div');
+    li.style.cssText = 'display:flex;gap:0.5rem;align-items:center;padding:0.4rem 0;border-bottom:1px solid var(--border)';
+    li.innerHTML = `
+      <span style="color:var(--text-muted);font-size:0.8rem">▶</span>
+      <input class="form-control" style="flex:1;padding:0.4rem 0.75rem;font-size:0.82rem" placeholder="Lesson title…"/>
+      <input class="form-control" style="width:80px;padding:0.4rem 0.5rem;font-size:0.78rem" placeholder="15 min"/>
+      <button type="button" style="background:none;border:none;color:var(--error);cursor:pointer;font-size:1rem;padding:0.2rem" onclick="this.parentElement.remove()">×</button>`;
+    body.appendChild(li);
+  }
+
+  // Init with 2 sample sections
+  addModule(); addModule();
+
+  function saveDraft() {
+    document.getElementById('f-published').checked = false;
+    document.getElementById('course-form').requestSubmit();
+  }
+</script>
+</body>
+</html>

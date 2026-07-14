@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Courses — Learnify</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">Learn<span>ify</span></a>
+  <ul class="nav-links">
+    <li><a href="courses.html" style="color:var(--gold)">Courses</a></li>
+    <li><a href="index.html#features">Features</a></li>
+  </ul>
+  <div class="nav-actions" id="nav-actions">
+    <a href="login.html" class="btn btn-outline">Login</a>
+    <a href="register.html" class="btn btn-primary">Sign Up</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <h1>All Courses</h1>
+    <p style="color:var(--text-secondary)">Explore our library of expert-led courses</p>
+  </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="filter-bar">
+  <div class="search-bar">
+    <input type="text" id="search" class="search-input" placeholder="🔍 Search courses…"/>
+  </div>
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="Web Dev">Web Dev</button>
+  <button class="filter-btn" data-cat="Data Science">Data Science</button>
+  <button class="filter-btn" data-cat="Design">Design</button>
+  <button class="filter-btn" data-cat="Mobile">Mobile</button>
+  <button class="filter-btn" data-cat="Cloud">Cloud</button>
+  <button class="filter-btn" data-cat="Marketing">Marketing</button>
+  <select id="filter-level" class="form-control form-select" style="width:auto;padding:0.4rem 2rem 0.4rem 0.75rem;border-radius:100px;font-size:0.82rem">
+    <option value="all">All Levels</option>
+    <option value="Beginner">Beginner</option>
+    <option value="Intermediate">Intermediate</option>
+    <option value="Advanced">Advanced</option>
+  </select>
+  <select id="filter-price" class="form-control form-select" style="width:auto;padding:0.4rem 2rem 0.4rem 0.75rem;border-radius:100px;font-size:0.82rem">
+    <option value="all">Any Price</option>
+    <option value="free">Free</option>
+    <option value="paid">Paid</option>
+  </select>
+</div>
+
+<!-- Results -->
+<section class="section" style="padding-top:2rem">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.75rem">
+      <div id="results-count" style="color:var(--text-muted);font-size:0.875rem"></div>
+      <select id="sort" class="form-control form-select" style="width:auto;padding:0.45rem 2.5rem 0.45rem 0.75rem;font-size:0.85rem">
+        <option value="default">Sort: Most Popular</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="rating">Top Rated</option>
+        <option value="newest">Newest</option>
+      </select>
+    </div>
+    <div class="courses-grid" id="courses-grid">
+      <!-- Rendered by JS -->
+    </div>
+    <div id="no-results" class="hidden" style="text-align:center;padding:4rem;color:var(--text-muted)">
+      <div style="font-size:3rem;margin-bottom:1rem">🔍</div>
+      <h3>No courses found</h3>
+      <p>Try adjusting your filters or search term</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <p>© 2025 Learnify. All rights reserved.</p>
+      <a href="index.html" style="color:var(--gold)">← Back to Home</a>
+    </div>
+  </div>
+</footer>
+
+<script src="auth.js"></script>
+<script src="courses.js"></script>
+<script>
+  let activeCat = 'all';
+
+  const render = () => {
+    let courses = Courses.getPublished();
+    const q = document.getElementById('search').value;
+    const level = document.getElementById('filter-level').value;
+    const price = document.getElementById('filter-price').value;
+    const sort = document.getElementById('sort').value;
+
+    courses = Courses.filter(courses, {
+      query: q, category: activeCat === 'all' ? null : activeCat,
+      level: level === 'all' ? null : level,
+      price: price === 'all' ? null : price
+    });
+
+    if (sort === 'price-low') courses.sort((a,b) => a.price - b.price);
+    else if (sort === 'price-high') courses.sort((a,b) => b.price - a.price);
+    else if (sort === 'rating') courses.sort((a,b) => b.rating - a.rating);
+    else if (sort === 'newest') courses.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+    else courses.sort((a,b) => b.students - a.students);
+
+    const grid = document.getElementById('courses-grid');
+    const noRes = document.getElementById('no-results');
+    document.getElementById('results-count').textContent = `Showing ${courses.length} course${courses.length !== 1 ? 's' : ''}`;
+
+    if (!courses.length) {
+      grid.innerHTML = '';
+      noRes.classList.remove('hidden');
+    } else {
+      grid.innerHTML = courses.map(c => Courses.buildCard(c)).join('');
+      noRes.classList.add('hidden');
+    }
+  };
+
+  // Category filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCat = btn.dataset.cat;
+      render();
+    });
+  });
+
+  document.getElementById('search').addEventListener('input', render);
+  document.getElementById('filter-level').addEventListener('change', render);
+  document.getElementById('filter-price').addEventListener('change', render);
+  document.getElementById('sort').addEventListener('change', render);
+
+  // Pre-filter from URL
+  const params = new URLSearchParams(location.search);
+  const catParam = params.get('cat');
+  if (catParam) {
+    activeCat = catParam;
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.cat === catParam);
+    });
+  }
+
+  // Nav state
+  const user = Auth.getCurrentUser();
+  if (user) {
+    document.getElementById('nav-actions').innerHTML = `
+      <a href="student-dashboard.html" class="btn btn-outline">Dashboard</a>
+      <button class="btn btn-primary" onclick="Auth.logout()">Logout</button>`;
+  }
+
+  render();
+</script>
+</body>
+</html>

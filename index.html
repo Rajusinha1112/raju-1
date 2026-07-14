@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Learnify — Learn Without Limits</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">Learn<span>ify</span></a>
+  <ul class="nav-links">
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="login.html" class="btn btn-outline">Login</a>
+    <a href="register.html" class="btn btn-primary">Get Started</a>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🚀 Over 50,000 students learning daily</div>
+    <h1>Master In-Demand Skills<br/>with <span class="accent">Expert-Led</span> Courses</h1>
+    <p>From web development to data science — learn at your own pace with industry professionals. Career-focused curriculum, lifetime access.</p>
+    <div class="hero-actions">
+      <a href="courses.html" class="btn btn-primary btn-lg">Explore Courses</a>
+      <a href="register.html" class="btn btn-outline btn-lg">Start for Free</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Courses Available</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">50K+</div>
+        <div class="stat-label">Active Students</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">120+</div>
+        <div class="stat-label">Expert Instructors</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">4.8★</div>
+        <div class="stat-label">Average Rating</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Featured Courses ── -->
+<section class="section" id="courses">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">📚 Top Picks</div>
+      <h2>Most Popular Courses</h2>
+      <p>Hand-picked courses with the highest ratings and enrollment numbers</p>
+    </div>
+    <div class="courses-grid" id="featured-courses">
+      <!-- Populated by JS -->
+      <div class="card course-card" style="opacity:0.5;animation:pulse 1.5s infinite">
+        <div class="course-thumb">⏳</div>
+        <div class="course-body"><div class="course-title">Loading...</div></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:2.5rem">
+      <a href="courses.html" class="btn btn-outline btn-lg">View All Courses →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Features ── -->
+<section class="section" id="features" style="background:var(--bg-secondary)">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">⚡ Why Learnify</div>
+      <h2>Everything You Need to Succeed</h2>
+      <p>A complete learning ecosystem built for the modern learner</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h4>Goal-Oriented Learning</h4>
+        <p>Structured paths that take you from beginner to job-ready, step by step.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h4>Learn Anywhere</h4>
+        <p>Access your courses on any device — phone, tablet, or desktop. Anytime.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <h4>Certificates</h4>
+        <p>Earn shareable certificates upon completion, recognized by employers.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👨‍🏫</div>
+        <h4>Expert Instructors</h4>
+        <p>Learn from working professionals with real industry experience.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⏱️</div>
+        <h4>Lifetime Access</h4>
+        <p>Pay once, access forever. Get all future updates at no extra cost.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h4>Q&A Support</h4>
+        <p>Ask questions and get answers from instructors and fellow students.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h4>Progress Tracking</h4>
+        <p>Visual dashboards to track your learning progress and milestones.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <h4>Updated Content</h4>
+        <p>Courses are regularly updated to reflect the latest industry trends.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Categories ── -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">🗂️ Browse by Category</div>
+      <h2>Find Your Path</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem">
+      <a href="courses.html?cat=Web+Dev" class="card" style="padding:1.5rem;text-align:center;display:block">
+        <div style="font-size:2rem;margin-bottom:0.5rem">💻</div>
+        <div style="font-size:0.875rem;font-weight:600">Web Development</div>
+      </a>
+      <a href="courses.html?cat=Data+Science" class="card" style="padding:1.5rem;text-align:center;display:block">
+        <div style="font-size:2rem;margin-bottom:0.5rem">📊</div>
+        <div style="font-size:0.875rem;font-weight:600">Data Science</div>
+      </a>
+      <a href="courses.html?cat=Design" class="card" style="padding:1.5rem;text-align:center;display:block">
+        <div style="font-size:2rem;margin-bottom:0.5rem">🎨</div>
+        <div style="font-size:0.875rem;font-weight:600">UI/UX Design</div>
+      </a>
+      <a href="courses.html?cat=Mobile" class="card" style="padding:1.5rem;text-align:center;display:block">
+        <div style="font-size:2rem;margin-bottom:0.5rem">📱</div>
+        <div style="font-size:0.875rem;font-weight:600">Mobile Dev</div>
+      </a>
+      <a href="courses.html?cat=Cloud" class="card" style="padding:1.5rem;text-align:center;display:block">
+        <div style="font-size:2rem;margin-bottom:0.5rem">☁️</div>
+        <div style="font-size:0.875rem;font-weight:600">Cloud & DevOps</div>
+      </a>
+      <a href="courses.html?cat=Marketing" class="card" style="padding:1.5rem;text-align:center;display:block">
+        <div style="font-size:2rem;margin-bottom:0.5rem">📢</div>
+        <div style="font-size:0.875rem;font-weight:600">Marketing</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Testimonials ── -->
+<section class="section" id="testimonials" style="background:var(--bg-secondary)">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">💬 Student Stories</div>
+      <h2>Real Results, Real People</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"Learnify helped me switch careers from banking to full-stack development in just 8 months. The structured curriculum made all the difference."</p>
+        <div class="testimonial-author">
+          <div class="avatar">AT</div>
+          <div><div class="author-name">Amit Thakur</div><div class="author-role">Frontend Developer @ Infosys</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"The Python & ML course was exceptional. The instructor explained complex topics in a way that was easy to understand. Got my first data science job!"</p>
+        <div class="testimonial-author">
+          <div class="avatar">NM</div>
+          <div><div class="author-name">Neha Malhotra</div><div class="author-role">Data Analyst @ TCS</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★☆</div>
+        <p>"Incredible value for money. The lifetime access means I can revisit lessons anytime. I've completed 4 courses and each one has been top quality."</p>
+        <div class="testimonial-author">
+          <div class="avatar">RS</div>
+          <div><div class="author-name">Rohan Shah</div><div class="author-role">Freelance Designer</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="section" style="text-align:center">
+  <div class="container">
+    <div style="max-width:600px;margin:0 auto">
+      <h2>Ready to Start Learning?</h2>
+      <p style="margin:1rem 0 2rem">Join 50,000+ students already learning on Learnify. Get unlimited access to top courses.</p>
+      <a href="register.html" class="btn btn-primary btn-lg">Create Free Account →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">Learn<span>ify</span></div>
+        <p>Empowering learners worldwide with quality education and industry-relevant skills.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Platform</h5>
+        <a href="courses.html">All Courses</a>
+        <a href="register.html">Sign Up Free</a>
+        <a href="login.html">Login</a>
+      </div>
+      <div class="footer-col">
+        <h5>Categories</h5>
+        <a href="#">Web Development</a>
+        <a href="#">Data Science</a>
+        <a href="#">UI/UX Design</a>
+        <a href="#">Mobile Dev</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Learnify. All rights reserved.</p>
+      <p>Made with ❤️ for learners everywhere</p>
+    </div>
+  </div>
+</footer>
+
+<script src="auth.js"></script>
+<script src="courses.js"></script>
+<script>
+  // Load featured courses
+  Auth.seedData();
+  const grid = document.getElementById('featured-courses');
+  const courses = Courses.getPublished().slice(0, 3);
+  grid.innerHTML = courses.map(c => Courses.buildCard(c)).join('');
+
+  // Auto redirect if logged in
+  const user = Auth.getCurrentUser();
+  if (user) {
+    document.querySelector('.nav-actions').innerHTML = `
+      <a href="student-dashboard.html" class="btn btn-outline">Dashboard</a>
+      <button class="btn btn-primary" onclick="Auth.logout()">Logout</button>`;
+  }
+</script>
+</body>
+</html>
